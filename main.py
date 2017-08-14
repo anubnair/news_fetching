@@ -2,25 +2,15 @@ import tornado.autoreload
 import tornado.ioloop
 import tornado.web
 import tornado.httpserver
-from tornado import options
 from tornado import gen
-from tornado import httpclient
-from tornado.options import define
 
 import jwt
-import json
 import datetime
-import time
-import random
-
-import httplib, urllib
-import threading
 import json
-import pickle
-import os
 
 from utils import mongodb
-from bson import json_util 
+from bson import json_util
+
 
 def authenticate(func):
     """
@@ -45,16 +35,17 @@ def authenticate(func):
             func(self, encoded)
         else:
             func(self, {'error': 'Invalid username/Password',
-                'key': None
+            'key': None
             })
     return inner
+
 
 def authentication_required(func):
     """
     Check authentication
     """
     def inner(self):
-        key =  self.get_argument('key')
+        key = self.get_argument('key')
         try:
             decoded = jwt.decode(key, 'secret')
         except jwt.ExpiredSignatureError:
@@ -73,15 +64,18 @@ def authentication_required(func):
 
     return inner
 
+
 class MainHandler(tornado.web.RequestHandler):
     @authenticate
     def post(self, encoded):
         self.write(json.dumps(encoded))
 
+
 class JsonObject:
     def toJSON(self):
-        return json.dumps(self, default=lambda o: o.__dict__, 
+        return json.dumps(self, default=lambda o: o.__dict__,
             sort_keys=True, indent=4)
+
 
 def get_news_details(keyword):
     """
@@ -101,6 +95,7 @@ def get_news_details(keyword):
             return_data[news_count] = news
             count += 1
     return json_util.dumps(return_data)
+
 
 class GetNewsDetails(tornado.web.RequestHandler):
     @authentication_required

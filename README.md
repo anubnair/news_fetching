@@ -20,6 +20,11 @@ $python news_data_generation.py
 Terminal 2: 
 $python main.py   
 
-Terminal 3:
+Terminal 3( this is for fetcing the news using keyword: strike):
 
 $python client.py -f strike
+
+Sample Nose Test:
+------------------
+$cd tests
+$nosetests

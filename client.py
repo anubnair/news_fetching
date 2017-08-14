@@ -1,19 +1,18 @@
-
-import httplib, urllib
-import threading
+import httplib
+import urllib
 import json
 import optparse
 
-from multiprocessing.dummy import Pool as ThreadPool
+params = urllib.urlencode({'username': 'anu', 'password': 'pass'})
 
-params = urllib.urlencode({ 'username': 'anu', 'password': 'pass'})
-
-headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
+headers = {"Content-type": "application/x-www-form-urlencoded",
+           "Accept": "text/plain"}
 conn = httplib.HTTPConnection("localhost", 8888)
 
 conn.request("POST", "/", params, headers)
 response = conn.getresponse()
 key = json.loads(response.read())['key']
+
 
 def get_news_details(keyword):
     params = urllib.urlencode({'key': key, 'keyword': keyword})
@@ -27,12 +26,12 @@ def get_news_details(keyword):
 if __name__ == '__main__':
 
     parser = optparse.OptionParser(usage="usage: %prog [options] filename",
-                          version="%prog 1.0")
+                                   version="%prog 1.0")
 
     parser.add_option('-f', '--fetch_news_details',
-                  dest="fetch_news_details",
-                  help='fetch news details',
-                  )
+                      dest="fetch_news_details",
+                      help='fetch news details',
+                      )
 
     (options, args) = parser.parse_args()
 
